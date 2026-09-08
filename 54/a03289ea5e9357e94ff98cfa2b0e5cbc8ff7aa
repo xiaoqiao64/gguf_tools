@@ -1,0 +1,24 @@
+parse_gguf.py
+  s_a8415a4947a25b::t_476ee9178e9862 76-82
+  s_a8415a4947a25b::t_386069461cf35e 244
+  s_a8415a4947a25b::t_b2015541683ffa 83-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "54a03289ea5e9357e94ff98cfa2b0e5cbc8ff7aa",
+  "prompts": {},
+  "logical_commit_id": "54a03289ea5e9357e94ff98cfa2b0e5cbc8ff7aa",
+  "sessions": {
+    "s_a8415a4947a25b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4153db7c-4a8d-4e38-861c-ff8cb6b488d3",
+        "model": "grok-4.6"
+      },
+      "human_author": "xiaoqiao64 <xiaoqiao64@126.com>",
+      "total_additions": 8,
+      "total_deletions": 2
+    }
+  }
+}
