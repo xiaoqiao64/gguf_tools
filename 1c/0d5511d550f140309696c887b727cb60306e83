@@ -1,0 +1,18 @@
+parse_gguf.py
+  h_7c4c3a6c6fda49 218
+Qwen3.8-27B-UD-IQ3_XXS.md
+  h_7c4c3a6c6fda49 39-125
+  h_7c4c3a6c6fda49 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1c0d5511d550f140309696c887b727cb60306e83",
+  "prompts": {},
+  "logical_commit_id": "1c0d5511d550f140309696c887b727cb60306e83",
+  "humans": {
+    "h_7c4c3a6c6fda49": {
+      "author": "xiaoqiao64 <xiaoqiao64@126.com>"
+    }
+  }
+}
