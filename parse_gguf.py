@@ -73,7 +73,13 @@ def fmt_val(val: Any) -> str:
 
 
 def md_cell(val: str) -> str:
-    return val.replace("|", "\\|").replace("~", "\\~").replace("\n", " ")
+    return val.replace("|", "\\|").replace("\n", " ")
+
+
+def md_code(val: str) -> str:
+    if "`" in val:
+        return f"`` {val} ``"
+    return f"`{val}`"
 
 
 def print_table(title: str, headers: list[str], rows: list[list[str]]) -> None:
@@ -235,7 +241,7 @@ def dump_tensors(reader: GGUFReader) -> None:
             name = items[0][0]
         else:
             name = merge_tensor_name(tmpl, [nums for _, nums in items])
-        rows.append([str(i), name, ttype, str(len(items))])
+        rows.append([str(i), md_code(name), ttype, str(len(items))])
     print_table("TENSORS", ["#", "NAME", "TENSOR_TYPE", "COUNT"], rows)
 
     counts = Counter(t.tensor_type.name for t in reader.tensors)
