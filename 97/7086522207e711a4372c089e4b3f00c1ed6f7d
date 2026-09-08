@@ -1,0 +1,15 @@
+Qwen3.8-27B-UD-IQ3_XXS.md
+  h_7c4c3a6c6fda49 1-902
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "977086522207e711a4372c089e4b3f00c1ed6f7d",
+  "prompts": {},
+  "logical_commit_id": "977086522207e711a4372c089e4b3f00c1ed6f7d",
+  "humans": {
+    "h_7c4c3a6c6fda49": {
+      "author": "xiaoqiao64 <xiaoqiao64@126.com>"
+    }
+  }
+}
