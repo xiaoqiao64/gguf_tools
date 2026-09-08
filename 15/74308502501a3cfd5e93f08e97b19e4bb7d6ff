@@ -1,0 +1,15 @@
+parse_gguf.py
+  h_7c4c3a6c6fda49 1-236
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1574308502501a3cfd5e93f08e97b19e4bb7d6ff",
+  "prompts": {},
+  "logical_commit_id": "1574308502501a3cfd5e93f08e97b19e4bb7d6ff",
+  "humans": {
+    "h_7c4c3a6c6fda49": {
+      "author": "xiaoqiao64 <xiaoqiao64@126.com>"
+    }
+  }
+}
