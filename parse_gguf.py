@@ -71,27 +71,16 @@ def fmt_val(val: Any) -> str:
     return str(val)
 
 
+def md_cell(val: str) -> str:
+    return val.replace("|", "\\|").replace("\n", " ")
+
+
 def print_table(title: str, headers: list[str], rows: list[list[str]]) -> None:
-    widths = [len(h) for h in headers]
+    print(f"## {title}\n")
+    print("| " + " | ".join(md_cell(h) for h in headers) + " |")
+    print("| " + " | ".join("---" for _ in headers) + " |")
     for row in rows:
-        for i, cell in enumerate(row):
-            widths[i] = max(widths[i], len(cell))
-
-    def sep() -> str:
-        return "+" + "+".join("-" * (w + 2) for w in widths) + "+"
-
-    def cells(vals: list[str]) -> str:
-        return "| " + " | ".join(v.center(w) for v, w in zip(vals, widths)) + " |"
-
-    body_w = len(cells(headers)) - 2
-    print(f"+{'-' * body_w}+")
-    print(f"|{title.center(body_w)}|")
-    print(sep())
-    print(cells(headers))
-    print(sep())
-    for row in rows:
-        print(cells(row))
-    print(sep())
+        print("| " + " | ".join(md_cell(c) for c in row) + " |")
     print()
 
 
@@ -124,13 +113,12 @@ def dump_metadata(reader: GGUFReader, path: str) -> None:
             f"{bpw:.2f} bpw" if n_params else NA,
         ]],
     )
-    print(
-        f"  file: {path}\n"
-        f"  gguf version: {fmt_val(version)}  "
-        f"file size: {fmt_bytes(file_size)}  "
-        f"tensors: {fmt_val(tensor_count)}  "
-        f"kv: {fmt_val(kv_count)}\n"
-    )
+    print(f"- file: `{path}`")
+    print(f"- gguf version: {fmt_val(version)}")
+    print(f"- file size: {fmt_bytes(file_size)}")
+    print(f"- tensors: {fmt_val(tensor_count)}")
+    print(f"- kv: {fmt_val(kv_count)}")
+    print()
 
     if arch == NA:
         return
@@ -212,8 +200,8 @@ def dump_tensors(reader: GGUFReader) -> None:
     print_table("TENSORS", ["#", "NAME", "TENSOR_TYPE"], rows)
 
     counts = Counter(t.tensor_type.name for t in reader.tensors)
-    summary = ", ".join(f"{name}={n}" for name, n in counts.most_common())
-    print(f"  tensor type counts: {summary}\n")
+    summary = ", ".join(f"`{name}`={n}" for name, n in counts.most_common())
+    print(f"**tensor type counts:** {summary}\n")
 
 
 def main() -> None:
@@ -221,7 +209,7 @@ def main() -> None:
     parser.add_argument("-m", "--model", required=True, help="Path to .gguf model file")
     args = parser.parse_args()
 
-    path = os.path.abspath(args.model)
+    path = args.model
     if not os.path.isfile(path):
         print(f"error: file not found: {path}", file=sys.stderr)
         sys.exit(1)
