@@ -73,7 +73,7 @@ def fmt_val(val: Any) -> str:
 
 
 def md_cell(val: str) -> str:
-    return val.replace("|", "\\|").replace("\n", " ")
+    return val.replace("|", "\\|").replace("~", "\\~").replace("\n", " ")
 
 
 def print_table(title: str, headers: list[str], rows: list[list[str]]) -> None:
