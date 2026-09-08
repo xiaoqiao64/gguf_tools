@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 from collections import Counter
 from typing import Any
@@ -192,12 +193,50 @@ def dump_tokenizer(reader: GGUFReader) -> None:
     )
 
 
+NUM_RE = re.compile(r"\d+")
+
+
+def compact_ints(nums: list[int]) -> str:
+    vals = sorted(set(nums))
+    if not vals:
+        return ""
+    ranges: list[tuple[int, int]] = []
+    start = prev = vals[0]
+    for n in vals[1:]:
+        if n == prev + 1:
+            prev = n
+            continue
+        ranges.append((start, prev))
+        start = prev = n
+    ranges.append((start, prev))
+    parts = [str(a) if a == b else f"{a}~{b}" for a, b in ranges]
+    return ",".join(parts)
+
+
+def merge_tensor_name(template: str, num_tuples: list[tuple[int, ...]]) -> str:
+    nslots = template.count("{}")
+    if nslots == 0:
+        return template
+    parts = [compact_ints([tup[i] for tup in num_tuples]) for i in range(nslots)]
+    it = iter(parts)
+    return re.sub(r"\{\}", lambda _: next(it), template)
+
+
 def dump_tensors(reader: GGUFReader) -> None:
-    rows = [
-        [str(i), tensor.name, tensor.tensor_type.name]
-        for i, tensor in enumerate(reader.tensors)
-    ]
-    print_table("TENSORS", ["#", "NAME", "TENSOR_TYPE"], rows)
+    groups: dict[tuple[str, str], list[tuple[str, tuple[int, ...]]]] = {}
+    for tensor in reader.tensors:
+        tmpl = NUM_RE.sub("{}", tensor.name)
+        nums = tuple(int(x) for x in NUM_RE.findall(tensor.name))
+        groups.setdefault((tmpl, tensor.tensor_type.name), []).append((tensor.name, nums))
+
+    rows: list[list[str]] = []
+    for i, ((tmpl, ttype), items) in enumerate(groups.items()):
+        if len(items) == 1:
+            name = items[0][0]
+        else:
+            name = merge_tensor_name(tmpl, [nums for _, nums in items])
+        rows.append([str(i), name, ttype, str(len(items))])
+    print_table("TENSORS", ["#", "NAME", "TENSOR_TYPE", "COUNT"], rows)
 
     counts = Counter(t.tensor_type.name for t in reader.tensors)
     summary = ", ".join(f"`{name}`={n}" for name, n in counts.most_common())
