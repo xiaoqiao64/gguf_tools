@@ -215,7 +215,7 @@ def compact_ints(nums: list[int]) -> str:
         ranges.append((start, prev))
         start = prev = n
     ranges.append((start, prev))
-    parts = [str(a) if a == b else f"{a}~{b}" for a, b in ranges]
+    parts = [str(a) if a == b else f"{a}-{b}" for a, b in ranges]
     return ",".join(parts)
 
 
